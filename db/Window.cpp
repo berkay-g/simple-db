@@ -35,6 +35,11 @@ int Window::Run()
     return static_cast<int>(msg.wParam);
 }
 
+void Window::Close()
+{
+    PostQuitMessage(0);
+}
+
 LRESULT CALLBACK Window::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 {
     Window* pThis = nullptr;
@@ -72,10 +77,10 @@ LRESULT CALLBACK Window::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
                     }
                 }
             }
+
             if (handled) 
-            {
                 return 0;
-            }
+
             break;
         }
         case WM_CTLCOLORSTATIC:
@@ -218,4 +223,33 @@ std::vector<HWND> Window::AddRadioButtons(int numRadioButtons, const std::vector
         horizontal ? xPosition += width + 10 : yPosition += height + 10;
     }
     return hWnds;
+}
+
+void Window::AddMenu(HMENU parentMenu, const TCHAR* menuName, int subMenuCount, ...)
+{
+    HMENU hSubMenu = CreateMenu();
+    va_list args;
+    va_start(args, subMenuCount);
+    for (int i = 0; i < subMenuCount; i++)
+    {
+        const TCHAR* itemName = va_arg(args, const TCHAR*);
+        if (itemName == NULL)
+            break;
+
+        int id = static_cast<int>(controls.size()) + 1;
+
+        typedef void (*FunctionPtr)(Window&);
+        FunctionPtr func = va_arg(args, FunctionPtr);
+
+        controls.push_back({ id, NULL, func });
+
+        AppendMenu(hSubMenu, MF_STRING, id, itemName);
+    }
+    va_end(args);
+    AppendMenu(parentMenu, MF_POPUP, (UINT_PTR)hSubMenu, menuName);
+}
+
+void Window::ApplyMenu(HMENU hMenu)
+{
+    SetMenu(hwnd, hMenu);
 }
