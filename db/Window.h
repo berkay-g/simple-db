@@ -10,6 +10,7 @@ public:
     void UnusedParam() {};
     Window(HINSTANCE hInstance, const TCHAR* title = _T("My Window"), int nWidth = 500, int nHeight = 500, DWORD flags = WS_OVERLAPPEDWINDOW);
     int Run();
+    void Close();
 
     HWND AddButton(const TCHAR* buttonText, int x, int y, int width, int height, void (*onClick)(Window&), DWORD flags = (WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON));
 
@@ -25,6 +26,14 @@ public:
     std::vector<HWND> AddRadioButtons(int numRadioButtons, const TCHAR* labels[], int x, int y, int width, int height, int selectedButton, void (*onClick)(Window&), bool horizontal = true);
     std::vector<HWND> AddRadioButtons(int numRadioButtons, const std::vector<std::wstring>& labels, int x, int y, int width, int height, int selectedButton, void (*onClick)(Window&), bool horizontal = true);
 
+    // Example Usage: // Function prototype -> void foo(Window&)
+    // HMENU hMenu = CreateMenu();
+    // AddMenu(hMenu, _T("File"), 3, _T("New"), newFunction, _T("Open"), openFunction, _T("Exit"), exitFunction); 
+    // AddMenu(hMenu, _T("Edit"), 3, _T("Copy"), copyFunction, _T("If No Function"), NULL, _T("Paste"), pasteFunction);
+    // ApplyMenu(hMenu);
+    void AddMenu(HMENU parentMenu, const TCHAR* menuName, int subMenuCount, ...);
+    void ApplyMenu(HMENU hMenu);
+ 
 private:
     static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     HWND hwnd;
