@@ -269,3 +269,28 @@ void Window::ApplyMenu(HMENU hMenu)
 {
     SetMenu(hwnd, hMenu);
 }
+
+void Window::ModifyControl(HWND control, const TCHAR* newText, int x, int y, int width, int height, DWORD newStyle, bool isButton)
+{
+    SetWindowText(control, newText);  // Change the control's text
+    SetWindowPos(control, NULL, x, y, width, height, SWP_NOSIZE | SWP_NOZORDER);  // Change position and size
+    SetWindowLongPtr(control, GWL_STYLE, newStyle);  // Change control style (flags)
+
+    // Redraw the control based on its type
+    if (isButton) {
+        // For buttons
+        InvalidateRect(control, NULL, TRUE);
+    }
+    else {
+        // For labels or other controls
+        RedrawWindow(control, NULL, NULL, RDW_ERASE | RDW_FRAME | RDW_INTERNALPAINT | RDW_INVALIDATE);
+    }
+}
+
+void Window::ChangeFont(HWND hWnd, const TCHAR* fontName, int fontSize, int fontWeight, bool isItalic, bool isUnderline, bool isStrikeOut)
+{
+    HFONT newFont = CreateFont(fontSize, 0, 0, 0, fontWeight, isItalic, isUnderline, isStrikeOut, DEFAULT_CHARSET, OUT_OUTLINE_PRECIS,
+        CLIP_DEFAULT_PRECIS, CLEARTYPE_QUALITY, DEFAULT_PITCH | FF_SWISS, fontName);
+
+    SendMessage(hWnd, WM_SETFONT, (WPARAM)newFont, TRUE);
+}
