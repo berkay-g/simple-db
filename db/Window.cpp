@@ -23,6 +23,9 @@ Window::Window(HINSTANCE hInstance, const TCHAR* title, int nWidth, int nHeight,
     hwnd = CreateWindow(wc.lpszClassName, title, flags, x, y, nWidth, nHeight, NULL, NULL, wc.hInstance, this);
 
     ShowWindow(hwnd, SW_SHOW);
+
+    this->minX = minX;
+    this->minY = minY;
 }
 
 int Window::Run() 
