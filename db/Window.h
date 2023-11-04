@@ -43,6 +43,7 @@ private:
     static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     HWND hwnd;
     HINSTANCE hInstance;
+    int minX, minY;
 
     struct ControlInfo
     {
