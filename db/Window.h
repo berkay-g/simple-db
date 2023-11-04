@@ -4,7 +4,9 @@
 #include <vector>
 #include <tchar.h>
 #include <string>
+
 #include <commctrl.h>
+#pragma comment(lib, "comctl32.lib")
 
 class Window {
 public:
