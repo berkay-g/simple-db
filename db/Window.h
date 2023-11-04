@@ -33,7 +33,9 @@ public:
     // ApplyMenu(hMenu);
     void AddMenu(HMENU parentMenu, const TCHAR* menuName, int subMenuCount, ...);
     void ApplyMenu(HMENU hMenu);
- 
+
+    void ModifyControl(HWND control, const TCHAR* newText, int x, int y, int width, int height, DWORD newStyle, bool isButton);
+    void ChangeFont(HWND hWnd, const TCHAR* fontName, int fontSize, int fontWeight = FW_NORMAL, bool isItalic = false, bool isUnderline = false, bool isStrikeOut = false);
 private:
     static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     HWND hwnd;
