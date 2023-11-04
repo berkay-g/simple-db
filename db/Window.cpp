@@ -90,6 +90,13 @@ LRESULT CALLBACK Window::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
             SetTextColor((HDC)wParam, RGB(109, 194, 222));
             SetBkMode((HDC)wParam, TRANSPARENT);
             return GetClassLongPtr(hwnd, GCLP_HBRBACKGROUND);
+        case WM_GETMINMAXINFO:
+        {
+            LPMINMAXINFO lpMMI = (LPMINMAXINFO)lParam;
+            lpMMI->ptMinTrackSize.x = pThis->minX;
+            lpMMI->ptMinTrackSize.y = pThis->minY;
+            return 0;
+        }
         case WM_DESTROY:
             PostQuitMessage(0);
             return 0;
