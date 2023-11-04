@@ -8,7 +8,7 @@
 class Window {
 public:
     void UnusedParam() {};
-    Window(HINSTANCE hInstance, const TCHAR* title = _T("My Window"), int nWidth = 500, int nHeight = 500, DWORD flags = WS_OVERLAPPEDWINDOW);
+    Window(HINSTANCE hInstance, const TCHAR* title = _T("My Window"), int nWidth = 500, int nHeight = 500, int minX = 300, int minY = 300, DWORD flags = WS_OVERLAPPEDWINDOW);
     int Run();
     void Close();
 
