@@ -223,6 +223,22 @@ std::vector<HWND> Window::AddRadioButtons(int numRadioButtons, const std::vector
         horizontal ? xPosition += width + 10 : yPosition += height + 10;
     }
     return hWnds;
+
+    /*
+    std::vector<HWND> radios;
+    void func(Window& window)
+    {
+        
+        int checkState = (int)SendMessage(radios[1], BM_GETCHECK, 0, 0);
+        
+        if (checkState == BST_CHECKED) {
+            MessageBox(NULL, _T("Radio button is checked!"), _T("Radio Button Checked"), MB_ICONINFORMATION | MB_OK);
+        } else {
+            // The radio button is not checked
+            // Handle the unchecked state here
+        }
+    }
+    */
 }
 
 void Window::AddMenu(HMENU parentMenu, const TCHAR* menuName, int subMenuCount, ...)
