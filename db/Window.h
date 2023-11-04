@@ -4,6 +4,7 @@
 #include <vector>
 #include <tchar.h>
 #include <string>
+#include <commctrl.h>
 
 class Window {
 public:
@@ -12,7 +13,7 @@ public:
     int Run();
     void Close();
 
-    HWND AddButton(const TCHAR* buttonText, int x, int y, int width, int height, void (*onClick)(Window&), DWORD flags = (WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON));
+    HWND AddButton(const TCHAR* buttonText, int x, int y, int width, int height, void (*onClick)(Window&), DWORD flags = (WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON), void (*onRightClick)(Window&) = NULL);
 
     HWND AddLabel(const TCHAR* labelText, int x, int y, int width, int height, DWORD flags = (WS_VISIBLE | WS_CHILD | WS_BORDER | SS_SUNKEN | SS_CENTER));
 
@@ -50,8 +51,11 @@ private:
         int id;
         HWND hwnd;
         void (*onClick)(Window&);
+        void (*onRightClick)(Window&);
     };
     std::vector<ControlInfo> controls;
 
     void (*ResizeCallback)(Window& window, HWND hWnd, int newWidth, int newHeight) = NULL;
+
+    static LRESULT CALLBACK SubclassButtonProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData);
 };
