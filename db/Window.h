@@ -36,6 +36,9 @@ public:
 
     void ModifyControl(HWND control, const TCHAR* newText, int x, int y, int width, int height, DWORD newStyle, bool isButton);
     void ChangeFont(HWND hWnd, const TCHAR* fontName, int fontSize, int fontWeight = FW_NORMAL, bool isItalic = false, bool isUnderline = false, bool isStrikeOut = false);
+
+    void SetResizeCallback(void(*Callback)(Window& window, HWND hWnd, int newWidth, int newHeight));
+    
 private:
     static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     HWND hwnd;
@@ -48,4 +51,6 @@ private:
         void (*onClick)(Window&);
     };
     std::vector<ControlInfo> controls;
+
+    void (*ResizeCallback)(Window& window, HWND hWnd, int newWidth, int newHeight) = NULL;
 };
