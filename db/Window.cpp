@@ -273,7 +273,7 @@ void Window::ApplyMenu(HMENU hMenu)
 void Window::ModifyControl(HWND control, const TCHAR* newText, int x, int y, int width, int height, DWORD newStyle, bool isButton)
 {
     SetWindowText(control, newText);  // Change the control's text
-    SetWindowPos(control, NULL, x, y, width, height, SWP_NOSIZE | SWP_NOZORDER);  // Change position and size
+    SetWindowPos(control, NULL, x, y, width, height, SWP_NOZORDER);  // Change position and size
     SetWindowLongPtr(control, GWL_STYLE, newStyle);  // Change control style (flags)
 
     // Redraw the control based on its type
@@ -293,4 +293,9 @@ void Window::ChangeFont(HWND hWnd, const TCHAR* fontName, int fontSize, int font
         CLIP_DEFAULT_PRECIS, CLEARTYPE_QUALITY, DEFAULT_PITCH | FF_SWISS, fontName);
 
     SendMessage(hWnd, WM_SETFONT, (WPARAM)newFont, TRUE);
+}
+
+void Window::SetResizeCallback(void(*Callback)(Window& window, HWND hWnd, int newWidth, int newHeight))
+{
+    ResizeCallback = Callback;
 }
