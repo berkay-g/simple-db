@@ -1,7 +1,7 @@
 #include "Window.h"
 #include "resource.h"
 
-Window::Window(HINSTANCE hInstance, const TCHAR* title, int nWidth, int nHeight, DWORD flags) : hInstance(hInstance)
+Window::Window(HINSTANCE hInstance, const TCHAR* title, int nWidth, int nHeight, int minX, int minY, DWORD flags) : hInstance(hInstance)
 {
     WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WindowProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, title, NULL };
 
