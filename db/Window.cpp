@@ -28,6 +28,8 @@ Window::Window(HINSTANCE hInstance, const TCHAR* title, int nWidth, int nHeight,
     this->minX = minX;
     this->minY = minY;
 
+    this->iWidth = nWidth;
+    this->iHeight = nHeight;
 }
 
 int Window::Run()
@@ -140,7 +142,7 @@ HWND Window::AddButton(const TCHAR* buttonText, int x, int y, int width, int hei
 {
     int id = static_cast<int>(controls.size()) + 1; // Generate a unique ID for the control
     HWND button = CreateWindow(_T("BUTTON"), buttonText, flags, x, y, width, height, hwnd, reinterpret_cast<HMENU>(static_cast<INT_PTR>(id)), hInstance, NULL);
-    controls.push_back({ id, button, onClick, onRightClick });
+    controls.push_back({ id, button, onClick, onRightClick, x, y, width, height, flags, buttonText });
 
     SetWindowSubclass(button, SubclassButtonProc, id, (DWORD_PTR)onRightClick);
 
@@ -151,7 +153,7 @@ HWND Window::AddLabel(const TCHAR* labelText, int x, int y, int width, int heigh
 {
     int id = static_cast<int>(controls.size()) + 1; // Generate a unique ID for the control
     HWND label = CreateWindow(_T("STATIC"), labelText, flags, x, y, width, height, hwnd, reinterpret_cast<HMENU>(static_cast<INT_PTR>(id)), hInstance, NULL);
-    controls.push_back({ id, label, nullptr, nullptr });
+    controls.push_back({ id, label, nullptr, nullptr, { x, y, width, height, flags, labelText } });
     return label;
 }
 
@@ -159,7 +161,7 @@ HWND Window::AddTextBox(int x, int y, int width, int height, DWORD flags)
 {
     int id = static_cast<int>(controls.size()) + 1; // Generate a unique ID for the control
     HWND textbox = CreateWindow(_T("EDIT"), _T(""), flags, x, y, width, height, hwnd, reinterpret_cast<HMENU>(static_cast<INT_PTR>(id)), hInstance, NULL);
-    controls.push_back({ id, textbox, nullptr, nullptr });
+    controls.push_back({ id, textbox, nullptr, nullptr, { x, y, width, height, flags } });
     return textbox;
 }
 
@@ -174,7 +176,7 @@ HWND Window::AddListBox(int x, int y, int width, int height, void (*selCallback)
 {
     int id = static_cast<int>(controls.size()) + 1; // Generate a unique ID for the control
     HWND listbox = CreateWindow(_T("ListBox"), _T(""), flags, x, y, width, height, hwnd, reinterpret_cast<HMENU>(static_cast<INT_PTR>(id)), hInstance, NULL);
-    controls.push_back({ id, listbox, selCallback, nullptr });
+    controls.push_back({ id, listbox, selCallback, nullptr, { x, y, width, height, flags } });
     return listbox;
 }
 
@@ -219,7 +221,7 @@ std::vector<HWND> Window::AddRadioButtons(int numRadioButtons, const TCHAR* labe
             radioButton = CreateWindow(_T("BUTTON"), labels[i], WS_CHILD | WS_VISIBLE | BS_AUTORADIOBUTTON,
                 xPosition, yPosition, width, height, hwnd, reinterpret_cast<HMENU>(static_cast<INT_PTR>(id)), hInstance, NULL);
         }
-        controls.push_back({ id, radioButton, onClick, nullptr });
+        controls.push_back({ id, radioButton, onClick, nullptr, { x, y, width, height } });
 
         int initialCheckState = (i == selectedButton) ? BST_CHECKED : BST_UNCHECKED;
         SendMessage(radioButton, BM_SETCHECK, initialCheckState, 0);
@@ -250,7 +252,7 @@ std::vector<HWND> Window::AddRadioButtons(int numRadioButtons, const std::vector
             radioButton = CreateWindow(_T("BUTTON"), labels[i].data(), WS_CHILD | WS_VISIBLE | BS_AUTORADIOBUTTON,
                 xPosition, yPosition, width, height, hwnd, reinterpret_cast<HMENU>(static_cast<INT_PTR>(id)), hInstance, NULL);
         }
-        controls.push_back({ id, radioButton, onClick, nullptr });
+        controls.push_back({ id, radioButton, onClick, nullptr, { x, y, width, height } });
 
         int initialCheckState = (i == selectedButton) ? BST_CHECKED : BST_UNCHECKED;
         SendMessage(radioButton, BM_SETCHECK, initialCheckState, 0);
