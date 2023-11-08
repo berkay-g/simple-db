@@ -42,22 +42,50 @@ public:
 
     void SetResizeCallback(void(*Callback)(Window& window, HWND hWnd, int newWidth, int newHeight));
     
-private:
-    static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-    HWND hwnd;
-    HINSTANCE hInstance;
-    int minX, minY;
-
     struct ControlInfo
     {
         int id;
         HWND hwnd;
         void (*onClick)(Window&);
         void (*onRightClick)(Window&);
+
+        struct Properties
+        {
+            int x, y, width, height;
+            unsigned long flags;
+
+            const TCHAR* name = NULL;
+        } properties;
     };
+
+private:
+    static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+    HWND hwnd;
+    HINSTANCE hInstance;
+    int minX, minY;
+    int iWidth, iHeight;
+
     std::vector<ControlInfo> controls;
 
     void (*ResizeCallback)(Window& window, HWND hWnd, int newWidth, int newHeight) = NULL;
 
     static LRESULT CALLBACK SubclassButtonProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData);
+
+public:
+    int GetControlSize() const
+    {
+        return static_cast<int>(controls.size());
+    }
+    ControlInfo GetControlInfo(int index) const
+    {
+        return controls[index];
+    }
+    int GetInitialWindowHeight() const
+    {
+        return iHeight;
+    }
+    int GetInitialWindowWidth() const
+    {
+        return iWidth;
+    }
 };
