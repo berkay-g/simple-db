@@ -161,7 +161,7 @@ HWND Window::AddTextBox(int x, int y, int width, int height, DWORD flags)
 {
     int id = static_cast<int>(controls.size()) + 1; // Generate a unique ID for the control
     HWND textbox = CreateWindow(_T("EDIT"), _T(""), flags, x, y, width, height, hwnd, reinterpret_cast<HMENU>(static_cast<INT_PTR>(id)), hInstance, NULL);
-    controls.push_back({ id, textbox, nullptr, nullptr, { x, y, width, height, flags } });
+    controls.push_back({ id, textbox, nullptr, nullptr, { x, y, width, height, flags, L"" } });
     return textbox;
 }
 
@@ -176,7 +176,7 @@ HWND Window::AddListBox(int x, int y, int width, int height, void (*selCallback)
 {
     int id = static_cast<int>(controls.size()) + 1; // Generate a unique ID for the control
     HWND listbox = CreateWindow(_T("ListBox"), _T(""), flags, x, y, width, height, hwnd, reinterpret_cast<HMENU>(static_cast<INT_PTR>(id)), hInstance, NULL);
-    controls.push_back({ id, listbox, selCallback, nullptr, { x, y, width, height, flags } });
+    controls.push_back({ id, listbox, selCallback, nullptr, { x, y, width, height, flags, L"" } });
     return listbox;
 }
 
@@ -363,7 +363,10 @@ void Window::SetResizeCallback(void(*Callback)(Window& window, HWND hWnd, int ne
             button.y = static_cast<int>(button.y * heightScale);
     
             window.ChangeFont(window.GetControlInfo(i).hwnd, L"Arial", static_cast<int>(max(16 * scaleFactor, minFontSize)), FW_DEMIBOLD);
-            window.ModifyControl(window.GetControlInfo(i).hwnd, window.GetControlInfo(i).properties.name, button.x, button.y, button.w, button.h, window.GetControlInfo(i).properties.flags, false);
+            if (window.GetControlInfo(i).properties.name != NULL)
+            {
+                window.ModifyControl(window.GetControlInfo(i).hwnd, window.GetTextBoxText(window.GetControlInfo(i).hwnd), button.x, button.y, button.w, button.h, window.GetControlInfo(i).properties.flags, false);
+            }
         }
     }
     */
