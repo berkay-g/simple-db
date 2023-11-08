@@ -337,4 +337,34 @@ void Window::ChangeFont(HWND hWnd, const TCHAR* fontName, int fontSize, int font
 void Window::SetResizeCallback(void(*Callback)(Window& window, HWND hWnd, int newWidth, int newHeight))
 {
     ResizeCallback = Callback;
+
+    /*
+    void WindowResizeCallback(Window& window, HWND hWnd, int newWidth, int newHeight) {
+
+        struct Button {
+            int x, y, w, h;
+        };
+    
+        float widthScale = static_cast<float>(newWidth) / (window.GetInitialWindowWidth() - 16);
+        float heightScale = static_cast<float>(newHeight) / (window.GetInitialWindowHeight() - 39);
+    
+        double scaleFactor = sqrt(widthScale * heightScale);
+        int minFontSize = 15;
+    
+        for (int i = 0; i < window.GetControlSize(); i++)
+        {
+            Button button = { window.GetControlInfo(i).properties.x, window.GetControlInfo(i).properties.y, window.GetControlInfo(i).properties.width, window.GetControlInfo(i).properties.height };
+            // Resize the button proportionately
+            button.w = static_cast<int>(button.w * widthScale);
+            button.h = static_cast<int>(button.h * heightScale);
+    
+            // Reposition the button proportionately
+            button.x = static_cast<int>(button.x * widthScale);
+            button.y = static_cast<int>(button.y * heightScale);
+    
+            window.ChangeFont(window.GetControlInfo(i).hwnd, L"Arial", static_cast<int>(max(16 * scaleFactor, minFontSize)), FW_DEMIBOLD);
+            window.ModifyControl(window.GetControlInfo(i).hwnd, window.GetControlInfo(i).properties.name, button.x, button.y, button.w, button.h, window.GetControlInfo(i).properties.flags, false);
+        }
+    }
+    */
 }
