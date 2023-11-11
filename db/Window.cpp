@@ -193,46 +193,6 @@ int Window::GetSelectedListBoxItem(HWND listBox)
     return -1; // No item selected or an error occurred.
 }
 
-void Window::UpdateListBox(HWND listBox, const std::vector<std::wstring>& items)
-{
-    SendMessage(listBox, LB_RESETCONTENT, 0, 0);
-    for (int i = 0; i < items.size(); i++)
-    {
-        SendMessage(listBox, LB_ADDSTRING, i, (LPARAM)items[i].data());
-    }
-}
-
-std::vector<HWND> Window::AddRadioButtons(int numRadioButtons, const TCHAR* labels[], int x, int y, int width, int height, int selectedButton, void (*onClick)(Window&), bool horizontal)
-{
-    int xPosition = x;
-    int yPosition = y;
-    std::vector<HWND> hWnds;
-    for (int i = 0; i < numRadioButtons; i++)
-    {
-        HWND radioButton;
-        int id = static_cast<int>(controls.size()) + 1;
-        if (i == 0)
-        {
-            radioButton = CreateWindow(_T("BUTTON"), labels[i], WS_CHILD | WS_VISIBLE | BS_AUTORADIOBUTTON | WS_GROUP,
-                xPosition, yPosition, width, height, hwnd, reinterpret_cast<HMENU>(static_cast<INT_PTR>(id)), hInstance, NULL);
-        }
-        else
-        {
-            radioButton = CreateWindow(_T("BUTTON"), labels[i], WS_CHILD | WS_VISIBLE | BS_AUTORADIOBUTTON,
-                xPosition, yPosition, width, height, hwnd, reinterpret_cast<HMENU>(static_cast<INT_PTR>(id)), hInstance, NULL);
-        }
-        controls.push_back({ id, radioButton, onClick, nullptr, { x, y, width, height } });
-
-        int initialCheckState = (i == selectedButton) ? BST_CHECKED : BST_UNCHECKED;
-        SendMessage(radioButton, BM_SETCHECK, initialCheckState, 0);
-
-
-        hWnds.push_back(radioButton);
-        horizontal ? xPosition += width + 10 : yPosition += height + 10;
-    }
-    return hWnds;
-}
-
 std::vector<HWND> Window::AddRadioButtons(int numRadioButtons, const std::vector<std::wstring>& labels, int x, int y, int width, int height, int selectedButton, void (*onClick)(Window&), bool horizontal)
 {
     int xPosition = x;
@@ -246,13 +206,14 @@ std::vector<HWND> Window::AddRadioButtons(int numRadioButtons, const std::vector
         {
             radioButton = CreateWindow(_T("BUTTON"), labels[i].data(), WS_CHILD | WS_VISIBLE | BS_AUTORADIOBUTTON | WS_GROUP,
                 xPosition, yPosition, width, height, hwnd, reinterpret_cast<HMENU>(static_cast<INT_PTR>(id)), hInstance, NULL);
+            controls.push_back({ id, radioButton, onClick, nullptr, { xPosition, yPosition, width, height, WS_CHILD | WS_VISIBLE | BS_AUTORADIOBUTTON | WS_GROUP, labels[i].data()} });
         }
         else
         {
             radioButton = CreateWindow(_T("BUTTON"), labels[i].data(), WS_CHILD | WS_VISIBLE | BS_AUTORADIOBUTTON,
                 xPosition, yPosition, width, height, hwnd, reinterpret_cast<HMENU>(static_cast<INT_PTR>(id)), hInstance, NULL);
+            controls.push_back({ id, radioButton, onClick, nullptr, { xPosition, yPosition, width, height, WS_CHILD | WS_VISIBLE | BS_AUTORADIOBUTTON, labels[i].data()}});
         }
-        controls.push_back({ id, radioButton, onClick, nullptr, { x, y, width, height } });
 
         int initialCheckState = (i == selectedButton) ? BST_CHECKED : BST_UNCHECKED;
         SendMessage(radioButton, BM_SETCHECK, initialCheckState, 0);
