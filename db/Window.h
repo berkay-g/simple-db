@@ -26,7 +26,6 @@ public:
     int GetSelectedListBoxItem(HWND listBox);
     void UpdateListBox(HWND listBox, const std::vector<std::wstring>& items);
 
-    std::vector<HWND> AddRadioButtons(int numRadioButtons, const TCHAR* labels[], int x, int y, int width, int height, int selectedButton, void (*onClick)(Window&), bool horizontal = true);
     std::vector<HWND> AddRadioButtons(int numRadioButtons, const std::vector<std::wstring>& labels, int x, int y, int width, int height, int selectedButton, void (*onClick)(Window&), bool horizontal = true);
 
     // Example Usage: // Function prototype -> void foo(Window&)
