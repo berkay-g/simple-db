@@ -193,6 +193,15 @@ int Window::GetSelectedListBoxItem(HWND listBox)
     return -1; // No item selected or an error occurred.
 }
 
+void Window::UpdateListBox(HWND listBox, const std::vector<std::wstring>& items)
+{
+    SendMessage(listBox, LB_RESETCONTENT, 0, 0);
+    for (int i = 0; i < items.size(); i++)
+    {
+        SendMessage(listBox, LB_ADDSTRING, i, (LPARAM)items[i].data());
+    }
+}
+
 std::vector<HWND> Window::AddRadioButtons(int numRadioButtons, const std::vector<std::wstring>& labels, int x, int y, int width, int height, int selectedButton, void (*onClick)(Window&), bool horizontal)
 {
     int xPosition = x;
